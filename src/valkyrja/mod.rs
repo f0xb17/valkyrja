@@ -3,6 +3,7 @@ pub struct Exception {
   code: ExceptionCode,
   message: String
 }
+
 #[derive(Copy, Clone)]
 enum ExceptionLevel {
   INFO,

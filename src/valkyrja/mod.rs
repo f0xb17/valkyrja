@@ -32,16 +32,12 @@ fn get_exception_code(code: ExceptionCode) -> String {
     ExceptionCode::FileError => return String::from("FILE ERROR"),
     ExceptionCode::ValueError => return String::from("VALUE ERROR"),
     ExceptionCode::RuntimeError => return String::from("RUNTIME ERROR"),
-    ExceptionCode::UnkownError => return String::from("UNKOWN ERROR")
+    ExceptionCode::UnkownError => return String::from("UNKOWN ERROR"),
   }
 }
 
 fn create_exception(level: ExceptionLevel, code: ExceptionCode, message: &str) -> Exception {
   return Exception{ level: level, code: code, message: String::from(message) }
-}
-
-pub fn returns_exception(e: &Exception) -> bool {
-  return e.level as i8 != -1 && e.code as i8 != -1 && e.message != String::from("")
 }
 
 pub fn throw_file_error(message: &str) -> Exception {

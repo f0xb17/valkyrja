@@ -5,7 +5,7 @@ use valkyrja::{throw_file_exception, throw_runtime_exception, throw_unkown_excep
 
 fn divide(x: u8, y: u8) -> Result<u8, Exception> {
     if y == 0 {
-        return Err(throw_value_error("Divison by Zero is not allowed!"));
+        return Err(throw_value_exception("Divison by Zero is not allowed!"));
     }
     Ok(x / y)
 }

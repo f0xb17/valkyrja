@@ -65,7 +65,6 @@ fn get_exception_code(code: ExceptionCode) -> String {
 /// # Returns
 /// 
 /// An `Exception` struct containing the provided level, code, and message.
-
 fn create_exception(level: ExceptionLevel, code: ExceptionCode, message: &str) -> Exception {
   return Exception{ level: level, code: code, message: String::from(message) }
 }
@@ -79,8 +78,8 @@ fn create_exception(level: ExceptionLevel, code: ExceptionCode, message: &str) -
 /// # Returns
 /// 
 /// An `Exception` struct containing the provided message and the ERROR level and FILE ERROR code.
-pub fn throw_file_exception(message: &str) -> Exception {
-  return create_exception(ExceptionLevel::ERROR, ExceptionCode::FileError, message)
+pub fn throw_file_exception<T: Into<Option<&'static str>>>(message: T) -> Exception {
+  return create_exception(ExceptionLevel::ERROR, ExceptionCode::FileError, message.into().unwrap_or("Encountered a file error!"))
 }
 
 /// Throws a value exception with the specified message.
@@ -92,8 +91,8 @@ pub fn throw_file_exception(message: &str) -> Exception {
 /// # Returns
 /// 
 /// An `Exception` struct containing the provided message and the ERROR level and VALUE ERROR code.
-pub fn throw_value_exception(message: &str) -> Exception {
-  return create_exception(ExceptionLevel::ERROR, ExceptionCode::ValueError, message)
+pub fn throw_value_exception<T: Into<Option<&'static str>>>(message: T) -> Exception {
+  return create_exception(ExceptionLevel::ERROR, ExceptionCode::ValueError, message.into().unwrap_or("Encountered a value error!"))
 }
 
 /// Throws a runtime exception with the specified message.
@@ -105,8 +104,8 @@ pub fn throw_value_exception(message: &str) -> Exception {
 /// # Returns
 /// 
 /// An `Exception` struct containing the provided message and the ERROR level and RUNTIME ERROR code.
-pub fn throw_runtime_exception(message: &str) -> Exception {
-  return create_exception(ExceptionLevel::ERROR, ExceptionCode::RuntimeError, message)
+pub fn throw_runtime_exception<T: Into<Option<&'static str>>>(message: T) -> Exception {
+  return create_exception(ExceptionLevel::ERROR, ExceptionCode::RuntimeError, message.into().unwrap_or("Encountered a runtime error!"))
 }
 
 /// Throws an unknown exception with the specified message.
@@ -118,8 +117,8 @@ pub fn throw_runtime_exception(message: &str) -> Exception {
 /// # Returns
 /// 
 /// An `Exception` struct containing the provided message and the ERROR level and UNKOWN ERROR code.
-pub fn throw_unkown_exception(message: &str) -> Exception {
-  return create_exception(ExceptionLevel::ERROR, ExceptionCode::UnkownError, message)
+pub fn throw_unkown_exception<T: Into<Option<&'static str>>>(message: T) -> Exception {
+  return create_exception(ExceptionLevel::ERROR, ExceptionCode::UnkownError, message.into().unwrap_or("Encountered an unkown error!"))
 }
 
 /// Formats the exception details into a readable string representation.

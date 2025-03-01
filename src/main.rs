@@ -4,14 +4,14 @@ use valkyrja::{throw_file_exception, throw_runtime_exception, throw_unkown_excep
 
 fn divide(x: u8, y: u8) -> Result<u8, Exception> {
     if y == 0 {
-        return Err(throw_value_exception("Divison by Zero is not allowed!"));
+        return Err(throw_value_exception(None))
     }
     Ok(x / y)
 }
 
 fn main() {
     let _file_error = throw_file_exception("File not found!");
-    let _value_error = throw_value_exception("Value not correct!");
+    let _value_error = throw_value_exception(None);
     let _runtime_error = throw_runtime_exception("Error during run!");
     let _unknown_error = throw_unkown_exception("An unknown error occurred!");
 

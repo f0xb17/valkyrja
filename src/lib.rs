@@ -5,14 +5,14 @@ pub struct Exception {
 }
 
 #[derive(Copy, Clone)]
-enum ExceptionLevel {
+pub enum ExceptionLevel {
   INFO,
   WARNING,
   ERROR
 }
 
 #[derive(Copy, Clone)]
-enum ExceptionCode {
+pub enum ExceptionCode {
   FileError,
   ValueError,
   RuntimeError,

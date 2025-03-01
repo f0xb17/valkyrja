@@ -1,4 +1,3 @@
-mod valkyrja;
 use valkyrja::{throw_file_exception, throw_runtime_exception, throw_unkown_exception, 
                 throw_value_exception, Exception, 
                 get_exception_message, raise_info, raise_warning};

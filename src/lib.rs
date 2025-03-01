@@ -161,3 +161,17 @@ pub fn raise_info(message: &str) -> String {
 pub fn raise_warning(message: &str) -> String {
   return format!("{}: {}", &get_exception_level(ExceptionLevel::WARNING), message)
 }
+
+
+/// Formats a string into a readable error message.
+///
+/// # Arguments
+///
+/// * `message` - A descriptive message providing additional details about the error.
+///
+/// # Returns
+///
+/// A `String` in the format of "ERROR: message", where `message` is the descriptive message.
+pub fn raise_error(message: &str) -> String {
+  return format!("{}: {}", &get_exception_level(ExceptionLevel::ERROR), message)
+}

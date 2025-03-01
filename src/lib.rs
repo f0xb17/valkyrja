@@ -29,10 +29,10 @@ enum ExceptionCode {
 /// 
 /// A `String` containing the descriptive representation of the exception level.
 fn get_exception_level(level: ExceptionLevel) -> String {
-  match level {
-    ExceptionLevel::INFO => return String::from("INFO"),
-    ExceptionLevel::ERROR => return String::from("ERROR"),
-    ExceptionLevel::WARNING => return String::from("WARNING")
+  return match level {
+    ExceptionLevel::INFO => String::from("INFO"),
+    ExceptionLevel::ERROR => String::from("ERROR"),
+    ExceptionLevel::WARNING => String::from("WARNING")
   }
 }
 
@@ -46,11 +46,11 @@ fn get_exception_level(level: ExceptionLevel) -> String {
 /// 
 /// A `String` containing the descriptive representation of the exception code.
 fn get_exception_code(code: ExceptionCode) -> String {
-  match code {
-    ExceptionCode::FileError => return String::from("FILE ERROR"),
-    ExceptionCode::ValueError => return String::from("VALUE ERROR"),
-    ExceptionCode::RuntimeError => return String::from("RUNTIME ERROR"),
-    ExceptionCode::UnkownError => return String::from("UNKOWN ERROR"),
+  return match code {
+    ExceptionCode::FileError => String::from("FILE ERROR"),
+    ExceptionCode::ValueError => String::from("VALUE ERROR"),
+    ExceptionCode::RuntimeError => String::from("RUNTIME ERROR"),
+    ExceptionCode::UnkownError => String::from("UNKOWN ERROR"),
   }
 }
 
@@ -66,7 +66,7 @@ fn get_exception_code(code: ExceptionCode) -> String {
 /// 
 /// An `Exception` struct containing the provided level, code, and message.
 fn create_exception(level: ExceptionLevel, code: ExceptionCode, message: &str) -> Exception {
-  return Exception{ level: level, code: code, message: String::from(message) }
+  return Exception{ level, code, message: String::from(message) }
 }
 
 /// Throws a file exception with the specified message.
@@ -117,8 +117,23 @@ pub fn throw_runtime_exception<T: Into<Option<&'static str>>>(message: T) -> Exc
 /// # Returns
 /// 
 /// An `Exception` struct containing the provided message and the ERROR level and UNKOWN ERROR code.
-pub fn throw_unkown_exception<T: Into<Option<&'static str>>>(message: T) -> Exception {
+pub fn throw_unknown_exception<T: Into<Option<&'static str>>>(message: T) -> Exception {
   return create_exception(ExceptionLevel::ERROR, ExceptionCode::UnkownError, message.into().unwrap_or("Encountered an unkown error!"))
+}
+
+/// Throws an exception with the specified level, code, and message.
+/// 
+/// # Arguments
+/// 
+/// * `level` - The severity level of the exception, represented by an `ExceptionLevel`.
+/// * `code` - The specific code of the exception, represented by an `ExceptionCode`.
+/// * `message` - A descriptive message providing additional details about the exception.
+/// 
+/// # Returns
+/// 
+/// An `Exception` struct containing the provided level, code, and message.
+pub fn throw_exception(level: ExceptionLevel, code: ExceptionCode, message: &str) -> Exception {
+  return create_exception(level, code, message)
 }
 
 /// Formats the exception details into a readable string representation.

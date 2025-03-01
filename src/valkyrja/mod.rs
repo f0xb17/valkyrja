@@ -1,7 +1,7 @@
 pub struct Exception {
-  level: ExceptionLevel,
-  code: ExceptionCode,
-  message: String
+  level:    ExceptionLevel,
+  code:     ExceptionCode,
+  message:  String
 }
 
 #[derive(Copy, Clone)]
@@ -40,23 +40,23 @@ fn create_exception(level: ExceptionLevel, code: ExceptionCode, message: &str) -
   return Exception{ level: level, code: code, message: String::from(message) }
 }
 
-pub fn throw_file_error(message: &str) -> Exception {
+pub fn throw_file_exception(message: &str) -> Exception {
   return create_exception(ExceptionLevel::ERROR, ExceptionCode::FileError, message)
 }
 
-pub fn throw_value_error(message: &str) -> Exception {
+pub fn throw_value_exception(message: &str) -> Exception {
   return create_exception(ExceptionLevel::ERROR, ExceptionCode::ValueError, message)
 }
 
-pub fn throw_runtime_error(message: &str) -> Exception {
+pub fn throw_runtime_exception(message: &str) -> Exception {
   return create_exception(ExceptionLevel::ERROR, ExceptionCode::RuntimeError, message)
 }
 
-pub fn throw_unkown_error(message: &str) -> Exception {
+pub fn throw_unkown_exception(message: &str) -> Exception {
   return create_exception(ExceptionLevel::ERROR, ExceptionCode::UnkownError, message)
 }
 
-pub fn get_error_message(e: Exception) -> String {
+pub fn get_exception_message(e: Exception) -> String {
   return format!("{} - {}: {}", &get_exception_level(e.level), &get_exception_code(e.code), &e.message)
 }
 

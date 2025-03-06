@@ -1,192 +1,60 @@
-pub struct Exception {
-  level:    ExceptionLevel,
-  code:     ExceptionCode,
-  message:  String
-}
-
-#[derive(Copy, Clone)]
+use std::fmt;
 pub enum ExceptionLevel {
   INFO,
   WARNING,
   ERROR
 }
 
-#[derive(Copy, Clone)]
-pub enum ExceptionCode {
-  FileError,
-  ValueError,
-  RuntimeError,
-  UnkownError
+pub enum ExceptionType {
+  FILE,
+  VALUE,
+  RUNTIME,
+  UNKNOWN
 }
 
-/// Converts an `ExceptionLevel` enum into a descriptive string representation.
-/// 
-/// # Arguments
-/// 
-/// * `level` - The severity level of the exception, represented by an `ExceptionLevel`.
-/// 
-/// # Returns
-/// 
-/// A `String` containing the descriptive representation of the exception level.
-fn get_exception_level(level: ExceptionLevel) -> String {
-  return match level {
-    ExceptionLevel::INFO => String::from("INFO"),
-    ExceptionLevel::ERROR => String::from("ERROR"),
-    ExceptionLevel::WARNING => String::from("WARNING")
+pub struct Exception<'a> {
+  exception_level: ExceptionLevel,
+  exception_type: ExceptionType,
+  exception_message: &'a str
+}
+
+impl fmt::Display for ExceptionType {
+  fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+    let s = match self {
+      ExceptionType::FILE => "FILE",
+      ExceptionType::VALUE => "VALUE",
+      ExceptionType::RUNTIME => "RUNTIME",
+      ExceptionType::UNKNOWN => "UNKNOWN",
+    };
+    write!(f, "{}", s)
   }
 }
 
-/// Converts an `ExceptionCode` enum into a descriptive string representation.
-/// 
-/// # Arguments
-/// 
-/// * `code` - The specific code of the exception, represented by an `ExceptionCode`.
-/// 
-/// # Returns
-/// 
-/// A `String` containing the descriptive representation of the exception code.
-fn get_exception_code(code: ExceptionCode) -> String {
-  return match code {
-    ExceptionCode::FileError => String::from("FILE ERROR"),
-    ExceptionCode::ValueError => String::from("VALUE ERROR"),
-    ExceptionCode::RuntimeError => String::from("RUNTIME ERROR"),
-    ExceptionCode::UnkownError => String::from("UNKOWN ERROR"),
+impl fmt::Display for ExceptionLevel {
+  fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+    let s = match self {
+      ExceptionLevel::INFO => "INFO",
+      ExceptionLevel::WARNING => "WARNING",
+      ExceptionLevel::ERROR => "ERROR",
+    };
+    write!(f, "{}", s)
   }
 }
+impl<'a> Exception<'a> {
+  fn new(exception_level: ExceptionLevel, exception_type: ExceptionType, exception_message: &str) -> Exception {
+    Exception { exception_level, exception_type, exception_message }
+  }
 
-/// Creates a new `Exception` with the specified level, code, and message.
-/// 
-/// # Arguments
-/// 
-/// * `level` - The severity level of the exception, represented by an `ExceptionLevel`.
-/// * `code` - The specific code of the exception, represented by an `ExceptionCode`.
-/// * `message` - A descriptive message providing additional details about the exception.
-/// 
-/// # Returns
-/// 
-/// An `Exception` struct containing the provided level, code, and message.
-fn create_exception(level: ExceptionLevel, code: ExceptionCode, message: &str) -> Exception {
-  return Exception{ level, code, message: String::from(message) }
-}
+  pub fn create(exception_type: ExceptionType, exception_message: &str) -> Exception {
+    match exception_type {
+      ExceptionType::FILE => Exception::new(ExceptionLevel::ERROR, ExceptionType::FILE, exception_message),
+      ExceptionType::VALUE => Exception::new(ExceptionLevel::ERROR, ExceptionType::VALUE, exception_message),
+      ExceptionType::RUNTIME => Exception::new(ExceptionLevel::ERROR, ExceptionType::RUNTIME, exception_message),
+      ExceptionType::UNKNOWN => Exception::new(ExceptionLevel::ERROR, ExceptionType::UNKNOWN, exception_message)
+    }
+  }
 
-/// Throws a file exception with the specified message.
-/// 
-/// # Arguments
-/// 
-/// * `message` - A descriptive message providing additional details about the exception.
-/// 
-/// # Returns
-/// 
-/// An `Exception` struct containing the provided message and the ERROR level and FILE ERROR code.
-pub fn throw_file_exception<T: Into<Option<&'static str>>>(message: T) -> Exception {
-  return create_exception(ExceptionLevel::ERROR, ExceptionCode::FileError, message.into().unwrap_or("Encountered a file error!"))
-}
-
-/// Throws a value exception with the specified message.
-/// 
-/// # Arguments
-/// 
-/// * `message` - A descriptive message providing additional details about the exception.
-/// 
-/// # Returns
-/// 
-/// An `Exception` struct containing the provided message and the ERROR level and VALUE ERROR code.
-pub fn throw_value_exception<T: Into<Option<&'static str>>>(message: T) -> Exception {
-  return create_exception(ExceptionLevel::ERROR, ExceptionCode::ValueError, message.into().unwrap_or("Encountered a value error!"))
-}
-
-/// Throws a runtime exception with the specified message.
-/// 
-/// # Arguments
-/// 
-/// * `message` - A descriptive message providing additional details about the exception.
-/// 
-/// # Returns
-/// 
-/// An `Exception` struct containing the provided message and the ERROR level and RUNTIME ERROR code.
-pub fn throw_runtime_exception<T: Into<Option<&'static str>>>(message: T) -> Exception {
-  return create_exception(ExceptionLevel::ERROR, ExceptionCode::RuntimeError, message.into().unwrap_or("Encountered a runtime error!"))
-}
-
-/// Throws an unknown exception with the specified message.
-/// 
-/// # Arguments
-/// 
-/// * `message` - A descriptive message providing additional details about the exception.
-/// 
-/// # Returns
-/// 
-/// An `Exception` struct containing the provided message and the ERROR level and UNKOWN ERROR code.
-pub fn throw_unknown_exception<T: Into<Option<&'static str>>>(message: T) -> Exception {
-  return create_exception(ExceptionLevel::ERROR, ExceptionCode::UnkownError, message.into().unwrap_or("Encountered an unkown error!"))
-}
-
-/// Throws an exception with the specified level, code, and message.
-/// 
-/// # Arguments
-/// 
-/// * `level` - The severity level of the exception, represented by an `ExceptionLevel`.
-/// * `code` - The specific code of the exception, represented by an `ExceptionCode`.
-/// * `message` - A descriptive message providing additional details about the exception.
-/// 
-/// # Returns
-/// 
-/// An `Exception` struct containing the provided level, code, and message.
-pub fn throw_exception(level: ExceptionLevel, code: ExceptionCode, message: &str) -> Exception {
-  return create_exception(level, code, message)
-}
-
-/// Formats the exception details into a readable string representation.
-///
-/// # Arguments
-///
-/// * `e` - An `Exception` instance containing the level, code, and message of the exception.
-///
-/// # Returns
-///
-/// A `String` in the format of "LEVEL - CODE: message", where `LEVEL` is the exception's severity level,
-/// `CODE` is the specific exception code, and `message` is the descriptive message.
-
-pub fn get_exception_message(e: Exception) -> String {
-  return format!("{} - {}: {}", &get_exception_level(e.level), &get_exception_code(e.code), &e.message)
-}
-
-/// Formats a string into a readable info message.
-///
-/// # Arguments
-///
-/// * `message` - A descriptive message providing additional details about the information.
-///
-/// # Returns
-///
-/// A `String` in the format of "INFO: message", where `message` is the descriptive message.
-pub fn raise_info(message: &str) -> String {
-  return format!("{}: {}", &get_exception_level(ExceptionLevel::INFO), message)
-}
-
-/// Formats a string into a readable warning message.
-///
-/// # Arguments
-///
-/// * `message` - A descriptive message providing additional details about the warning.
-///
-/// # Returns
-///
-/// A `String` in the format of "WARNING: message", where `message` is the descriptive message.
-pub fn raise_warning(message: &str) -> String {
-  return format!("{}: {}", &get_exception_level(ExceptionLevel::WARNING), message)
-}
-
-
-/// Formats a string into a readable error message.
-///
-/// # Arguments
-///
-/// * `message` - A descriptive message providing additional details about the error.
-///
-/// # Returns
-///
-/// A `String` in the format of "ERROR: message", where `message` is the descriptive message.
-pub fn raise_error(message: &str) -> String {
-  return format!("{}: {}", &get_exception_level(ExceptionLevel::ERROR), message)
+  pub fn throw(&self) -> String {
+    panic!("{} - {}: {}", ExceptionLevel::ERROR, self.exception_type, self.exception_message)
+  }
 }

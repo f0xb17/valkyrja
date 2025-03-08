@@ -1,1 +1,5 @@
+# Rust Target Folder
 /target
+
+# JetBrains
+/.idea

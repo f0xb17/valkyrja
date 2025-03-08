@@ -1,4 +1,5 @@
 use std::fmt;
+
 pub enum ExceptionLevel {
   INFO,
   WARNING,
@@ -40,6 +41,7 @@ impl fmt::Display for ExceptionLevel {
     write!(f, "{}", s)
   }
 }
+
 impl<'a> Exception<'a> {
   fn new(exception_level: ExceptionLevel, exception_type: ExceptionType, exception_message: &str) -> Exception {
     Exception { exception_level, exception_type, exception_message }
